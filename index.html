@@ -105,7 +105,14 @@
     <button onclick="checkDiscount()">بررسی تخفيف</button>
     <div id="result"></div>
      </div>
-         
+        
+  <!-- دکمه دانلود CSV -->
+<a href="#" id="download-csv-link" style="display: inline-block; margin-top: 10px; text-decoration: none;">
+  <button type="button" style="background: #2196F3; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer;">
+    دانلود گزارش به صورت CSV
+  </button>
+</a>
+  
   <!-- دو تصویر زیر فرم -->
   <div class="images-row">
     <img src="1.jpg" alt="تصویر 1">
@@ -114,6 +121,8 @@
 
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwDQJXt-XenEh6EupyXhNPi4fgHx0NXNID-mF5tbm9YLckScd0MdcDCWBhEYu9lkdd5/exec";
+    // تنظیم لینک دانلود CSV هنگام بارگذاری صفحه
+    document.getElementById("download-csv-link").href = WEB_APP_URL + "?action=report-csv";
     
     async function checkDiscount() {
       const phoneInput = document.getElementById("phone");
