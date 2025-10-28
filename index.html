@@ -136,8 +136,7 @@
       }
 
       // نمایش پیام لودینگ
-      showResult("،  لطفا کمی صبر کنید در حال بررسی...", "loading");
-
+    showResult("لطفاً کمی صبر کنید، در حال بررسی...", "loading");
       try {
         const response = await fetch(`${WEB_APP_URL}?phone=${encodeURIComponent(cleanPhone)}`);
         const data = await response.json();
