@@ -6,10 +6,10 @@
   <title>بررسي تخفيف</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: Tahoma, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #3498db; /* کل صفحه آبی */
+      background-color: #3498db; /* کل صفحه آبي */
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -62,18 +62,16 @@
       margin-top: 20px;
       padding: 10px;
       border-radius: 4px;
-      text-align: center;
     }
 
     .success { background: #d4edda; color: #155724; }
     .error { background: #f8d7da; color: #721c24; }
-    .loading { background: #e3f2fd; color: #1976d2; }
 
-    /* استایل تصاویر زیر فرم */
+    /* استايل تصاوير زير فرم */
     .images-row {
       display: flex;
       justify-content: center;
-      gap: 16px;
+      gap: 16px; /* فاصله کم بين تصاوير */
       margin-top: 30px;
       padding: 0 20px;
       flex-wrap: wrap;
@@ -98,40 +96,27 @@
     <img src="logo.png" alt="لوگوي دانشگاه">
   </div>
 
-  <!-- فرم بررسی تخفیف -->
+  <!-- فرم بررسي تخفيف -->
   <div class="container">
-    <h2>بررسی تخفيف</h2>
+    <h2>بررسي تخفيف</h2>
     <input type="tel" id="phone" placeholder="شماره تلفن خود را وارد کنيد (مثلاً 09123456789)" />
-    <button onclick="checkDiscount()">بررسی تخفيف</button>
+    <button onclick="checkDiscount()">بررسي تخفيف</button>
     <div id="result"></div>
-     </div>
-        
-  <!-- دکمه دانلود CSV -->
-<a href="#" id="download-csv-link" style="display: inline-block; margin-top: 10px; text-decoration: none;">
-  <button type="button" style="background: #2196F3; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer;">
-    دانلود گزارش به صورت CSV
-  </button>
-</a>
-  
-  <!-- دو تصویر زیر فرم -->
+  </div>
+
+  <!-- دو تصوير زير فرم -->
   <div class="images-row">
-    <img src="1.jpg" alt="تصویر 1">
-    <img src="2.jpg" alt="تصویر 2">
+    <img src="1.jpg" alt="تصوير 1">
+    <img src="2.jpg" alt="تصوير 2">
   </div>
 
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwDQJXt-XenEh6EupyXhNPi4fgHx0NXNID-mF5tbm9YLckScd0MdcDCWBhEYu9lkdd5/exec";
-    // تنظیم لینک دانلود CSV هنگام بارگذاری صفحه
-    document.getElementById("download-csv-link").href = WEB_APP_URL + "?action=report-csv";
-    
+
     async function checkDiscount() {
       const phoneInput = document.getElementById("phone");
       const resultDiv = document.getElementById("result");
       const phone = phoneInput.value.trim();
-
-      // پاک کردن هر محتوای قبلی
-      resultDiv.textContent = "";
-      resultDiv.className = "";
 
       if (!phone) {
         showResult("لطفاً شماره تلفن را وارد کنيد.", "error");
@@ -144,38 +129,26 @@
         return;
       }
 
-      // نمایش پیام لودینگ
-      showResult("لطفاً کمی منتظر باشید...", "loading");
-
       try {
         const response = await fetch(`${WEB_APP_URL}?phone=${encodeURIComponent(cleanPhone)}`);
         const data = await response.json();
 
         if (data.success) {
-          showResult(
-                  `نام: ${data.name}<br>
-                   شماره تلفن: ${cleanPhone}<br>
-                   ${data.discount} تخفیف لیمو فعال است.<br>
-                   سه رقم آخر شماره دانشجویی/پرسنلی: ${data.password}`,
-                   "success"
-  );
-} 
-        else {
+          showResult(`براي ${data.name} به شماره تلفن ${cleanPhone}، ${data.discount} تخفيف ليمو فعال است.`, "success");
+        } else {
           showResult(data.message || "اين شماره معتبر نيست.", "error");
         }
       } catch (error) {
         console.error("خطا:", error);
         showResult("خطا در اتصال به سرور. لطفاً دوباره تلاش کنيد.", "error");
       }
-      // پاک کردن فیلد شماره تلفن
-      phoneInput.value = "";
     }
 
     function showResult(message, type) {
-    const resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = message; 
-    resultDiv.className = type;
-}
+      const resultDiv = document.getElementById("result");
+      resultDiv.textContent = message;
+      resultDiv.className = type;
+    }
   </script>
 </body>
 </html>
