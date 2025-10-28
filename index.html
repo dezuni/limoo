@@ -158,6 +158,8 @@
         console.error("خطا:", error);
         showResult("خطا در اتصال به سرور. لطفاً دوباره تلاش کنيد.", "error");
       }
+      // پاک کردن فیلد شماره تلفن
+      phoneInput.value = "";
     }
 
     function showResult(message, type) {
