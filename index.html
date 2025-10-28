@@ -143,8 +143,9 @@
         const data = await response.json();
 
         if (data.success) {
-          showResult(`براي ${data.name} به شماره تلفن ${cleanPhone}، ${data.discount} تخفيف ليمو فعال است.`, "success");
-        } else {
+                showResult(`براي ${data.name} به شماره تلفن ${cleanPhone}، ${data.discount} تخفيف ليمو فعال است. پسورد ایشان: ${data.password}`, "success");    
+        } 
+        else {
           showResult(data.message || "اين شماره معتبر نيست.", "error");
         }
       } catch (error) {
