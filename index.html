@@ -105,14 +105,7 @@
     <button onclick="checkDiscount()">بررسی تخفيف</button>
     <div id="result"></div>
      
-    <!-- دریافت گزارش -->
-    </div>
-    <div class="container">
-    <button onclick="fetchReport()">دریافت گزارش </button>
-    <div id="report-result" style="margin-top: 20px; width: 90%; max-width: 400px;"></div>
-    </div>
-
-      
+         
   <!-- دو تصویر زیر فرم -->
   <div class="images-row">
     <img src="1.jpg" alt="تصویر 1">
@@ -121,29 +114,7 @@
 
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwDQJXt-XenEh6EupyXhNPi4fgHx0NXNID-mF5tbm9YLckScd0MdcDCWBhEYu9lkdd5/exec";
-    async function fetchReport() {
-  const reportDiv = document.getElementById("report-result");
-  reportDiv.innerHTML = '<div class="loading">در حال بارگذاری گزارش...</div>';
-
-  try {
-    const response = await fetch(`${WEB_APP_URL}?action=report`);
-    const data = await response.json();
-
-    if (data.success && data.report && data.report.length > 0) {
-      let html = "<h3>گزارش استفاده‌کنندگان:</h3><ul style='text-align: right;'>";
-      data.report.forEach(item => {
-        html += `<li><strong>${item.name}</strong> — تاریخ: ${item.date} | ساعت: ${item.time}</li>`;
-      });
-      html += "</ul>";
-      reportDiv.innerHTML = html;
-    } else {
-      reportDiv.innerHTML = '<div class="error">هیچ رکوردی با وضعیت "used" یافت نشد.</div>';
-    }
-  } catch (error) {
-    console.error("خطا در دریافت گزارش:", error);
-    reportDiv.innerHTML = '<div class="error">خطا در اتصال به سرور. لطفاً دوباره تلاش کنید.</div>';
-  }
-}
+    
     async function checkDiscount() {
       const phoneInput = document.getElementById("phone");
       const resultDiv = document.getElementById("result");
