@@ -143,9 +143,14 @@
         const data = await response.json();
 
         if (data.success) {
-                showResult(`براي ${data.name} به شماره تلفن ${cleanPhone}، <br> ${data.discount}  <br> تخفيف ليمو فعال است. 
-                پسورد ایشان: ${data.password}`, "success");    
-        } 
+          showResult(
+                  `نام: ${data.name}<br>
+                   شماره تلفن: ${cleanPhone}<br>
+                   ${data.discount} تخفیف لیمو فعال است.<br>
+                   پسورد ایشان: ${data.password}`,
+                   "success"
+  );
+} 
         else {
           showResult(data.message || "اين شماره معتبر نيست.", "error");
         }
@@ -156,10 +161,10 @@
     }
 
     function showResult(message, type) {
-      const resultDiv = document.getElementById("result");
-      resultDiv.textContent = message;
-      resultDiv.className = type;
-    }
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = message; 
+    resultDiv.className = type;
+}
   </script>
 </body>
 </html>
