@@ -62,16 +62,18 @@
       margin-top: 20px;
       padding: 10px;
       border-radius: 4px;
+      text-align: center;
     }
 
     .success { background: #d4edda; color: #155724; }
     .error { background: #f8d7da; color: #721c24; }
+    .loading { background: #e3f2fd; color: #1976d2; }
 
     /* استایل تصاویر زیر فرم */
     .images-row {
       display: flex;
       justify-content: center;
-      gap: 16px; /* فاصله کم بین تصاویر */
+      gap: 16px;
       margin-top: 30px;
       padding: 0 20px;
       flex-wrap: wrap;
@@ -118,6 +120,10 @@
       const resultDiv = document.getElementById("result");
       const phone = phoneInput.value.trim();
 
+      // پاک کردن هر محتوای قبلی
+      resultDiv.textContent = "";
+      resultDiv.className = "";
+
       if (!phone) {
         showResult("لطفاً شماره تلفن را وارد کنيد.", "error");
         return;
@@ -128,6 +134,9 @@
         showResult("شماره تلفن معتبر نيست.", "error");
         return;
       }
+
+      // نمایش پیام لودینگ
+      showResult("لطفاً کمی منتظر باشید...", "loading");
 
       try {
         const response = await fetch(`${WEB_APP_URL}?phone=${encodeURIComponent(cleanPhone)}`);
