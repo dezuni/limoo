@@ -1,37 +1,43 @@
-<body>
-    <header>
-        <div class="container-header" >
-
-            <div class="header-content">
-                                <button class="mobile-menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="logo">
-                    <img src="logo.png" alt="لوگوی دانشگاه" style="max-width: 40%; height: auto;">
-                </div>
-                
-            </div>
-        </div>
-    </header>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>بررسی تخفیف</title>
+  <title>بررسي تخفيف</title>
   <style>
     body {
       font-family: Tahoma, sans-serif;
-      padding: 20px;
-      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      background-color: #3498db; /* کل صفحه آبی */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
+    .logo {
+      padding: 16px 0;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .logo img {
+      max-width: 40%;
+      height: auto;
+    }
+
     .container {
       max-width: 400px;
-      margin: auto;
+      margin: 30px auto;
       background: white;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 90%;
     }
+
     input, button {
       width: 100%;
       padding: 10px;
@@ -39,34 +45,73 @@
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      box-sizing: border-box;
     }
+
     button {
       background: #4CAF50;
       color: white;
       cursor: pointer;
     }
+
     button:hover {
       background: #45a049;
     }
+
     #result {
       margin-top: 20px;
       padding: 10px;
       border-radius: 4px;
     }
+
     .success { background: #d4edda; color: #155724; }
     .error { background: #f8d7da; color: #721c24; }
+
+    /* استایل تصاویر زیر فرم */
+    .images-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px; /* فاصله کم بین تصاویر */
+      margin-top: 30px;
+      padding: 0 20px;
+      flex-wrap: wrap;
+    }
+
+    .images-row img {
+      width: 140px;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .images-row img:hover {
+      transform: scale(1.04);
+    }
   </style>
 </head>
 <body>
+  <!-- لوگو -->
+  <div class="logo">
+    <img src="logo.png" alt="لوگوي دانشگاه">
+  </div>
+
+  <!-- فرم بررسی تخفیف -->
   <div class="container">
-    <h2>بررسی تخفیف</h2>
-    <input type="tel" id="phone" placeholder="شماره تلفن خود را وارد کنید (مثلاً 09123456789)" />
-    <button onclick="checkDiscount()">بررسی تخفیف</button>
+    <h2>بررسي تخفيف</h2>
+    <input type="tel" id="phone" placeholder="شماره تلفن خود را وارد کنيد (مثلاً 09123456789)" />
+    <button onclick="checkDiscount()">بررسي تخفيف</button>
     <div id="result"></div>
   </div>
 
+  <!-- دو تصویر زیر فرم -->
+  <div class="images-row">
+    <img src="1.jpg" alt="تصویر 1">
+    <img src="2.jpg" alt="تصویر 2">
+  </div>
+
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwDQJXt-XenEh6EupyXhNPi4fgHx0NXNID-mF5tbm9YLckScd0MdcDCWBhEYu9lkdd5/exec"; // ⬅️ اینجا URL وب‌اپ خود را بگذارید
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwDQJXt-XenEh6EupyXhNPi4fgHx0NXNID-mF5tbm9YLckScd0MdcDCWBhEYu9lkdd5/exec";
 
     async function checkDiscount() {
       const phoneInput = document.getElementById("phone");
@@ -74,14 +119,13 @@
       const phone = phoneInput.value.trim();
 
       if (!phone) {
-        showResult("لطفاً شماره تلفن را وارد کنید.", "error");
+        showResult("لطفاً شماره تلفن را وارد کنيد.", "error");
         return;
       }
 
-      // حذف کاراکترهای غیرعددی (اختیاری)
       const cleanPhone = phone.replace(/\D/g, "");
       if (cleanPhone.length < 10) {
-        showResult("شماره تلفن معتبر نیست.", "error");
+        showResult("شماره تلفن معتبر نيست.", "error");
         return;
       }
 
@@ -90,14 +134,13 @@
         const data = await response.json();
 
         if (data.success) {
-          //showResult(`سلام ${data.name}! شما ${data.discount} تخفیف دارید.`, "success");
-            showResult(`برای ${data.name} به شماره تلفن ${cleanPhone}، ${data.discount} تخفیف لیمو فعال است.`, "success");
+          showResult(`براي ${data.name} به شماره تلفن ${cleanPhone}، ${data.discount} تخفيف ليمو فعال است.`, "success");
         } else {
-          showResult(data.message || "این شماره معتبر نیست.", "error");
+          showResult(data.message || "اين شماره معتبر نيست.", "error");
         }
       } catch (error) {
         console.error("خطا:", error);
-        showResult("خطا در اتصال به سرور. لطفاً دوباره تلاش کنید.", "error");
+        showResult("خطا در اتصال به سرور. لطفاً دوباره تلاش کنيد.", "error");
       }
     }
 
@@ -109,4 +152,3 @@
   </script>
 </body>
 </html>
-</body>
