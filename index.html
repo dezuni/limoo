@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>بررسي تخفيف</title>
+  <title>بررسی کد تخفیف</title>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Vazirmatn', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #3498db; /* کل صفحه آبی */
+      background-color: #3498db;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -69,7 +73,6 @@
     .error { background: #f8d7da; color: #721c24; }
     .loading { background: #e3f2fd; color: #1976d2; }
 
-    /* استایل تصاویر زیر فرم */
     .images-row {
       display: flex;
       justify-content: center;
@@ -93,79 +96,72 @@
   </style>
 </head>
 <body>
-  <!-- لوگو -->
   <div class="logo">
-    <img src="logo.png" alt="لوگوي دانشگاه">
+    <img src="logo.png" alt="لوگوی دانشگاه">
   </div>
 
-  <!-- فرم بررسی تخفیف -->
   <div class="container">
-    <h2>بررسی تخفيف</h2>
-    <input type="tel" id="phone" placeholder="شماره تلفن متقاضی را وارد کنيد (مثلاً 09123456789)" />
-    <button onclick="checkDiscount()">بررسی تخفيف</button>
+    <h2>بررسی کد تخفیف</h2>
+    <input type="text" id="discountCode" placeholder="کد تخفیف را وارد کنید (مثلاً ABC123)" />
+    <button onclick="checkDiscount()">بررسی کد تخفیف</button>
     <div id="result"></div>
-     </div>
-         
-  <!-- دو تصویر زیر فرم -->
+  </div>
+
   <div class="images-row">
-    <img src="1.jpg" alt="تصویر 1">
-    <img src="2.jpg" alt="تصویر 2">
+    <img src="1.png" alt="تصویر 1">
   </div>
 
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwDQJXt-XenEh6EupyXhNPi4fgHx0NXNID-mF5tbm9YLckScd0MdcDCWBhEYu9lkdd5/exec";
-    
-    async function checkDiscount() {
-      const phoneInput = document.getElementById("phone");
-      const resultDiv = document.getElementById("result");
-      const phone = phoneInput.value.trim();
+    const CURRENT_STORE = "فست فود لیمو"
 
-      // پاک کردن هر محتوای قبلی
+    async function checkDiscount() {
+      const input = document.getElementById("discountCode");
+      const resultDiv = document.getElementById("result");
+      const code = input.value.trim();
+
       resultDiv.textContent = "";
       resultDiv.className = "";
 
-      if (!phone) {
-        showResult("لطفاً شماره تلفن را وارد کنيد.", "error");
+      if (!code) {
+        showResult("لطفاً کد تخفیف را وارد کنید.", "error");
         return;
       }
 
-      const cleanPhone = phone.replace(/\D/g, "");
-      if (cleanPhone.length < 10) {
-        showResult("شماره تلفن معتبر نيست.", "error");
-        return;
-      }
+      showResult("در حال بررسی کد تخفیف...", "loading");
 
-      // نمایش پیام لودینگ
-    showResult("لطفاً کمی صبر کنید، در حال بررسی...", "loading");
       try {
-        const response = await fetch(`${WEB_APP_URL}?phone=${encodeURIComponent(cleanPhone)}`);
+        const url = `${WEB_APP_URL}?code=${encodeURIComponent(code)}&store=${encodeURIComponent(CURRENT_STORE)}`;
+        const response = await fetch(url);
         const data = await response.json();
 
         if (data.success) {
-          showResult(
-                  `نام: ${data.name}<br>
-                   شماره تلفن: ${cleanPhone}<br>
-                   ${data.discount}  درصد تخفیف لیمو فعال است.<br>
-                   سه رقم آخر شماره دانشجویی/پرسنلی: ${data.password}`,
-                   "success"
-  );
-} 
-        else {
-          showResult(data.message || "اين شماره معتبر نيست.", "error");
+          const creditStr = (typeof data.credit === 'number') ? data.credit.toLocaleString() : data.credit;
+          const inShopPayStr = (typeof data.inShopPay === 'number') ? data.inShopPay.toLocaleString() : data.inShopPay;
+
+          const message = `
+کد تخفیف <strong>${code}</strong> معتبر است.<br>
+نام و نام خانوادگی: <strong>${data.name}</strong><br>
+اعتبار کارت تخفیف: <strong>${creditStr} تومان</strong><br>
+پرداخت در فروشگاه: <strong>${inShopPayStr} تومان</strong>
+`;
+          showResult(message, "success");
+        } else {
+          showResult(data.message || "خطای نامشخص.", "error");
         }
       } catch (error) {
         console.error("خطا:", error);
-        showResult("خطا در اتصال به سرور. لطفاً دوباره تلاش کنيد.", "error");
+        showResult("خطا در اتصال به سرور. لطفاً دوباره تلاش کنید.", "error");
       }
-      // پاک کردن فیلد شماره تلفن
-      phoneInput.value = "";
+
+      input.value = "";
     }
 
     function showResult(message, type) {
-    const resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = message; 
-    resultDiv.className = type;
-}
+      const div = document.getElementById("result");
+      div.innerHTML = message;
+      div.className = type;
+    }
   </script>
 </body>
 </html>
