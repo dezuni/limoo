@@ -138,6 +138,10 @@
         if (data.success) {
           const creditStr = (typeof data.credit === 'number') ? data.credit.toLocaleString() : data.credit;
           const inShopPayStr = (typeof data.inShopPay === 'number') ? data.inShopPay.toLocaleString() : data.inShopPay;
+          const storeProfitStr = (typeof data.storeProfit === 'number')
+  ? data.storeProfit.toLocaleString()
+  : data.storeProfit;
+
 
           const message = `
 کد تخفیف <strong>${code}</strong> معتبر است.<br>
@@ -145,6 +149,8 @@
 نام و نام خانوادگی: <strong>${data.name}</strong><br>
 اعتبار کارت تخفیف: <strong>${creditStr} تومان</strong><br>
 پرداخت در فروشگاه: <strong>${inShopPayStr} تومان</strong>
+طلب فروشگاه از دزیونی: <strong>${storeProfitStr} تومان</strong><br>
+
 `;
           showResult(message, "success");
         } else {
